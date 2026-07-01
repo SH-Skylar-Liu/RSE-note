@@ -305,3 +305,59 @@ code .     # 用 VS Code 打开整个项目文件夹
 1. `Functions should use snake case naming style`
 2. `Add missing docstrings to function and module`
 3. `Script fails with undefined function name error`
+
+每个 issue 建完后在右侧 Assignees 把自己加上。
+
+---
+
+### Feature Branch Workflow 完整流程（以 Issue #1 为例）
+
+#### 1. 创建 feature 分支
+
+```bash
+git checkout -b issue/1-snake-case-naming
+git branch   # 确认前面有 * 的是新分支
+```
+
+命名规范：`issue/编号-简短描述`
+
+```bash
+git branch      # 只显示本地分支，* 标记当前所在分支
+git branch -a   # 显示所有分支，包括远端（remotes/origin/...）
+git remote -v   # 查看当前仓库连接的远端地址（fetch 和 push 各一条）
+```
+
+#### 2. 改代码
+
+在 VS Code 里修改 `climate_analysis.py`，**只改当前 issue 对应的内容**，其他 issue 的问题留给各自的分支。
+
+Issue #1 的改动（snake_case 命名）：
+
+| 原来 | 改成 |
+|---|---|
+| `def FahrToCelsius(fahr):` | `def fahr_to_celsius(fahr):` |
+| `FahrToCelsius(fahr) + 273.15` | `fahr_to_celsius(fahr) + 273.15` |
+| `def FahrToKelvin(fahr):` | `def fahr_to_kelvin(fahr):` |
+| `kelvin = FahrToKelvin(fahr)` | `kelvin = fahr_to_kelvin(fahr)` |
+
+> 注意：循环里的 `FahrToCels(fahr)` 是 Issue #3 的 bug，此处**不动**。
+
+改完后 **Ctrl+S 保存**，用 `git status` 确认文件出现在 modified 列表。
+
+#### 3. Commit 并 Push
+
+```bash
+git add climate_analysis.py
+git commit -m "Rename functions to use snake_case naming style, closes #1"
+git push origin issue/1-snake-case-naming
+```
+
+commit message 里写 `closes #1`，PR 合并时会自动关闭对应 issue。
+
+#### 4. 创建 Pull Request
+
+GitHub 会弹出 "Compare & pull request" 横幅，点击进入，填写：
+- **Title**：与 issue 标题对应
+- **Description**：`Closes #1`
+
+点 **Create pull request**。
