@@ -116,6 +116,19 @@ feature:           C'---D'   ← SHA 已变，是新的提交对象
 > 原因：你改写了 SHA，别人本地的历史与远端对不上，会产生大量冲突和混乱。
 > 只对**本地**、**只有你自己用**的分支 rebase。
 
+> **Rebase 方向规则**（课堂补充）：
+> 技术上所有分支是对等的，但实践中永远应该是：**在 feature 分支上 rebase，然后 merge 进 main**。
+> 不要反过来——不要把 main rebase 到 feature 上。
+> 合适时机：开 PR 之前，feature 分支开发完成、准备合并时，可以 rebase 一次来整理历史。
+
+> **Rebase 时的合并冲突**（课堂问答）：
+> Rebase 和 3-way merge 都可能遇到合并冲突，区别在于**冲突发生的时机不同**：
+> - 3-way merge：冲突在最终合并时暴露
+> - Rebase：冲突在 rebase 阶段（合并之前）就已暴露——某种程度上是提前检查了兼容性，确认没问题后再 merge 会更有把握
+
+> **讲师实用建议**（课堂原话）：
+> "如果不确定，我宁愿多加一个 merge commit，也不去动 commit history。rebase 的风险是万一改错了，历史就乱了；而 3-way merge 所有变更都可见、都可追溯，更安全。大型项目我依然用这个策略。"
+
 ---
 
 ### 2.4 Squash & Merge
@@ -242,6 +255,27 @@ feature:       C---D---F---G   ← feature 不受影响
 ## 4. 实操练习
 
 > *待续——讲到此处时补充*
+
+### Fork vs. Template（课堂补充）
+
+课程用的是 **Use this template**，而非 Fork，两者有本质区别：
+
+| | Fork | Template |
+|---|---|---|
+| 与原仓库的关系 | 保持连接，追踪上游历史 | **不连接**，不追踪历史 |
+| 适用场景 | 想向原项目贡献代码（PR） | 只是借用代码结构，独立开发 |
+| upstream 概念 | 原仓库 = upstream，fork = origin | 无 upstream 关系 |
+
+用 template 的原因：课程要在自己的仓库里随意改 commit history，不影响原仓库，也不需要向原仓库提 PR。
+
+**Upstream 关系链**（fork 场景下）：
+```
+原仓库（upstream）
+    ↓ fork
+你的 GitHub 仓库（origin/remote）
+    ↓ clone
+本地机器（local）
+```
 
 ### 准备工作
 
