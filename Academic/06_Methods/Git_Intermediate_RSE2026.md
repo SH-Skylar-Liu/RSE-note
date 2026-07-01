@@ -322,10 +322,50 @@ git branch   # 确认前面有 * 的是新分支
 命名规范：`issue/编号-简短描述`
 
 ```bash
-git branch      # 只显示本地分支，* 标记当前所在分支
-git branch -a   # 显示所有分支，包括远端（remotes/origin/...）
-git remote -v   # 查看当前仓库连接的远端地址（fetch 和 push 各一条）
+# 查看状态
+git status              # 查看工作区状态：哪些文件被修改、暂存或未追踪
+
+# 分支查看
+git branch              # 查看本地分支，* 标记当前所在分支
+git branch -a           # 显示所有分支，包括远端（remotes/origin/...）  ⬅ TODO: 根据录音补充详解
+
+# 切换分支（两种写法）
+git checkout -b <branch>   # 旧写法：创建并切换分支
+git checkout <branch>      # 旧写法：切换到已有分支
+git switch -c <branch>     # 新写法：创建并切换分支（Git 2.23+）
+git switch <branch>        # 新写法：切换到已有分支
+git switch -h              # 查看 git switch 所有可用参数
+git checkout -h            # 查看 git checkout 所有可用参数
+# 任何 git 命令加 -h 都能看帮助，两者输出略有不同（checkout 参数更多，因为功能更多）
+# 讲师习惯用 checkout，认为 switch 是更现代的替代品，两者目前并存
+
+# 暂存与提交
+git add <file>             # 将指定文件加入暂存区
+git add .                  # 将所有改动加入暂存区
+git commit -m "message"    # 提交暂存区内容，-m 后跟 commit message
+
+# 推送到远端
+git push                              # 推送到当前分支已追踪的远端（需先设置 upstream）
+git push -u origin <branch>           # 推送并设置该分支追踪 origin/<branch>（-u 是 --set-upstream 的简写）
+git push --set-upstream origin <branch>  # 同上，完整写法
+git push -h                           # 查看 git push 所有可用参数
+# 首次推送新分支用 -u，之后在该分支上直接 git push 即可
+
+# 远端与历史
+git remote -v           # 查看当前仓库连接的远端地址  ⬅ TODO: 根据录音补充详解
+git log                 # 查看 commit 历史  ⬅ TODO: 根据录音补充详解
 ```
+
+**`git switch` vs `git checkout` 的区别：**
+
+| | `git checkout` | `git switch` |
+|---|---|---|
+| 版本 | 旧（一直存在） | 新（Git 2.23+ 引入） |
+| 功能 | 多用途：切换分支、恢复文件都用它 | 专门用于切换分支 |
+| 风险 | 容易混淆：`git checkout file.py` 会直接丢弃文件改动 | 更安全，不会意外覆盖文件 |
+| 推荐 | 仍广泛使用，教程中常见 | 更现代、意图更清晰 |
+
+两者切换分支的效果完全相同，只是 `switch` 职责更单一、不容易误操作。
 
 #### 2. 改代码
 
